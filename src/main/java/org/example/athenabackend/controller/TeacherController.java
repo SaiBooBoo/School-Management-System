@@ -3,13 +3,16 @@ package org.example.athenabackend.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.athenabackend.dao.TeacherDao;
 import org.example.athenabackend.dto.TeacherDto;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryDto;
 import org.example.athenabackend.entity.Teacher;
 import org.example.athenabackend.exception.TeacherImageNotFoundException;
 import org.example.athenabackend.exception.TeacherNotFoundException;
 import org.example.athenabackend.service.FileStorageService;
 import org.example.athenabackend.service.TeacherService;
+import org.example.athenabackend.util.TeacherUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,25 @@ public class TeacherController {
     private final TeacherService teacherService;
     private final FileStorageService fileStorageService;
     private final TeacherDao teacherDao;
+
+    @DeleteMapping("/{teacherId}/subjects/{subjectId}")
+    public ResponseEntity<String> removeSubjectFromTeacher(@PathVariable Integer teacherId,
+                                                           @PathVariable Integer subjectId){
+        teacherService.removeSubjectFromTeacher(teacherId, subjectId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Subject with id " + subjectId + " has been removed from teacher with id " + teacherId);
+    }
+
+    @GetMapping("/by-subject")
+    public ResponseEntity<List<TeacherSummaryDto>> getTeachersBySubject(@RequestParam String subjectName){
+        return ResponseEntity.ok(teacherService.getTeachersBySubject(subjectName));
+    }
+
+    @PostMapping("/{teacherId}/subjects/{subjectId}")
+    public ResponseEntity<Void> addSubjectToTeacher(@PathVariable Integer teacherId,
+                                                    @PathVariable Integer subjectId){
+        teacherService.addSubjectToTeacher(teacherId, subjectId);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/search")
     public List<TeacherDto> searchTeacherByName(@RequestParam("username") String username){

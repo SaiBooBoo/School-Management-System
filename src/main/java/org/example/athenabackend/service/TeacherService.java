@@ -2,15 +2,16 @@ package org.example.athenabackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.athenabackend.dao.StudentDao;
+import org.example.athenabackend.dao.SubjectDao;
 import org.example.athenabackend.dao.TeacherDao;
 import org.example.athenabackend.dto.TeacherDto;
 import org.example.athenabackend.dtoSummaries.StudentSummaryDto;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryDto;
 import org.example.athenabackend.entity.Student;
 import org.example.athenabackend.entity.StudentTeacher;
+import org.example.athenabackend.entity.Subject;
 import org.example.athenabackend.entity.Teacher;
-import org.example.athenabackend.exception.StudentDoesNotExistInTeacherException;
-import org.example.athenabackend.exception.StudentNotFoundException;
-import org.example.athenabackend.exception.TeacherNotFoundException;
+import org.example.athenabackend.exception.*;
 import org.example.athenabackend.util.StudentUtil;
 import org.example.athenabackend.util.TeacherUtil;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,33 @@ import java.util.stream.Collectors;
 public class TeacherService {
     private final TeacherDao teacherDao;
     private final StudentDao studentDao;
+    private final SubjectDao subjectDao;
+
+    public List<TeacherSummaryDto> getTeachersBySubject (String subjectName){
+        return teacherDao.findDistinctBySubjectsSubjectName(subjectName)
+                .stream()
+                .map(TeacherUtil::toTeacherSummaryDto)
+                .toList();
+    }
+
+    public List<TeacherSummaryDto> getAllTeacherSummaries(){
+        return teacherDao.findAllWithSubjects()
+                .stream()
+                .map(TeacherUtil::toTeacherSummaryDto)
+                .collect(Collectors.toList());
+    }
+
+
+    public void addSubjectToTeacher(Integer teacherId, Integer subjectId){
+        Teacher teacher = teacherDao.findById(teacherId)
+                .orElseThrow(() -> new TeacherNotFoundException(teacherId));
+        Subject subject = subjectDao.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException(subjectId));
+        if(teacher.getSubjects().contains(subject)){
+            throw new SubjectAlreadyExistsException(subject.getSubjectName());
+        }
+        teacher.getSubjects().add(subject);
+        teacherDao.save(teacher);
+    }
 
     public List<TeacherDto> getAllTeachers(){
         return teacherDao.findAll().stream()
@@ -104,6 +132,15 @@ public class TeacherService {
         teacher.getStudents().remove(toRemove);
         student.getTeachers().remove(toRemove);
 
+        teacherDao.saveAndFlush(teacher);
+    }
+
+    public void removeSubjectFromTeacher(Integer teacherId, Integer subjectId) {
+        Teacher teacher = teacherDao.findById(teacherId)
+                .orElseThrow(() -> new TeacherNotFoundException(teacherId));
+        Subject subject = subjectDao.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException(subjectId));
+        teacher.getSubjects().remove(subject);
         teacherDao.saveAndFlush(teacher);
     }
 }

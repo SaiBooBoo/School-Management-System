@@ -31,8 +31,8 @@ public class StudentUtil {
                 s.getGender(),
                 s.getDob(),
                 s.getAddress(),
-                s.getGrade(),
                 s.getProfileImagePath(),
+                s.getGrade(),
                 parents
         );
     }
@@ -50,7 +50,8 @@ public class StudentUtil {
                 s.getDisplayName(),
                 s.getDob(),
                 s.getGrade(),
-                s.getProfileImagePath()
+                s.getProfileImagePath(),
+                s.getAddress()
         );
     }
 }

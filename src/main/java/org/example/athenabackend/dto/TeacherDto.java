@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.athenabackend.dtoSummaries.StudentSummaryDto;
-import org.example.athenabackend.model.Subject;
+import org.example.athenabackend.model.Gender;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,7 +24,8 @@ public class TeacherDto {
     private String phone;
     private String address;
     private BigDecimal earning;
-    private Subject subject;
+    private Gender gender;
     private String profileImagePath;
     private List<StudentSummaryDto> students;
+    private List<String> subjects;
 }

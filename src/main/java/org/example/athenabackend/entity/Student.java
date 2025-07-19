@@ -13,7 +13,9 @@ import org.example.athenabackend.model.Gender;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,9 +33,10 @@ public class Student extends User{
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
     private Gender gender = Gender.OTHER;
-    private BigDecimal grade;
     @Column(name = "profile_image_path")
     private String profileImagePath;
+    private BigDecimal grade;
+
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<StudentTeacher> teachers = new ArrayList<StudentTeacher>();
@@ -51,13 +54,16 @@ public class Student extends User{
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fee> fees = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "students")
+    private Set<Classroom> classrooms = new HashSet<>();
+
     public Student(String username, String password,String displayName, Gender gender, LocalDate dob, String address, BigDecimal grade) {
         super(username, password);
         this.dob = dob;
         this.address = address;
-        this.grade = grade;
         this.displayName = displayName;
         this.gender = gender;
+        this.grade = grade;
     }
 
     public void addFee(Fee fee) {

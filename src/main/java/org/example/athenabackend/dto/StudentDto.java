@@ -23,8 +23,8 @@ public class StudentDto {
     private Gender gender;
     private LocalDate dob;
     private String address;
+    private String profileImagePath;
     private BigDecimal grade;
-    private String profileImage;
     private List<ParentSummaryDto> parents;
 
 }

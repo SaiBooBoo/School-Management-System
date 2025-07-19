@@ -55,7 +55,17 @@ public class SecurityConfig {
             c.configurationSource(source);
         });
         http.authorizeHttpRequests(r -> {
-            r.requestMatchers("/","/api/auth/**", "/api/students/**", "api/teachers/**", "/api/parents/**", "api/files/**").permitAll();
+            r.requestMatchers("/","/api/auth/**",
+                    "/api/students/**",
+                    "api/teachers/**"
+                    , "/api/parents/**",
+                    "api/files/**",
+                    "api/classrooms/**",
+                    "api/exams/**",
+                    "api/fees/**",
+                    "api/attendances/**",
+                    "api/subjects/**"
+                    ).permitAll();
             r.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults());
         return http.build();

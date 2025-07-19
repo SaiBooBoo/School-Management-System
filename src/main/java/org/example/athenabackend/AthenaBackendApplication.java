@@ -58,7 +58,7 @@ public class AthenaBackendApplication {
             ParentOrGuardian parentOrGuardian = new ParentOrGuardian("Kushina Uzumaki", passwordEncoder.encode("12345"), "Kushina",Gender.FEMALE, "12/ABC(N)123456", LocalDate.of(2000, 5, 3), "BAs English", "09443289890", "Leaf Village", ParentType.MOTHER, "url");
             parentOrGuardian.getRoles().add(teacherRole);
 
-            Teacher teacher = new Teacher("jane", passwordEncoder.encode("12345"),"Jane","12/ABC(N)123456", "BAs English", LocalDate.of(2000, 5, 3),"09443289890", "Gone Naung Mo", BigDecimal.valueOf(0), "url", Subject.ENGLISH);
+            Teacher teacher = new Teacher("jane", passwordEncoder.encode("12345"),"Jane","12/ABC(N)123456", "BAs English", LocalDate.of(2000, 5, 3),"09443289890", "Gone Naung Mo", BigDecimal.valueOf(0), "url", Gender.FEMALE);
             teacher.getRoles().add(teacherRole);
 
             SuperAdmin superAdmin = new SuperAdmin("Samuel", passwordEncoder.encode("12345"), "sam@gmail.com", "999-33-8989", BigDecimal.valueOf(0));

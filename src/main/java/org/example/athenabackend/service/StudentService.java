@@ -54,7 +54,6 @@ public class StudentService {
                 .toList();
     }
 
-
     public List<AttendanceDto> getAttendanceByStatus(AttendanceStatus status){
         return attendanceDao.findByStatus(status).stream()
                 .map(AttendanceUtil::toAttendanceDto)
@@ -96,7 +95,8 @@ public class StudentService {
                 student.getDisplayName(),
                 student.getDob(),
                 student.getGrade(),
-                student.getProfileImagePath()
+                student.getProfileImagePath(),
+                student.getAddress()
         );
     }
 
@@ -174,7 +174,6 @@ public class StudentService {
             student.setDisplayName(studentDto.getDisplayName());
             student.setDob(studentDto.getDob());
             student.setAddress(studentDto.getAddress());
-            student.setGrade(studentDto.getGrade());
             student.setProfileImagePath(profileImagePath);
             Student savedStudent = studentDao.save(student);
 

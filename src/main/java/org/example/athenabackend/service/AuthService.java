@@ -44,8 +44,9 @@ public class AuthService {
                            String parentType,
                            String qualification,
                            String accountType,
-                           String image_url,
-                           Subject subject) {
+                           String profileImagePath,
+                           Subject subject,
+                           BigDecimal grade) {
         if(userDao.existsByUsername(username)){
             throw new UsernameAlreadyExistException(username);
         }
@@ -57,7 +58,7 @@ public class AuthService {
                     teacherRole.setRoleName("ROLE_TEACHER");
                     teacherRole = roleDao.save(teacherRole);
                 }
-                Teacher teacher = new Teacher(username, passwordEncoder.encode(password),displayName,nrcNumber, qualification, dob, phoneNumber, address, BigDecimal.valueOf(0), image_url, subject);
+                Teacher teacher = new Teacher(username, passwordEncoder.encode(password),displayName,nrcNumber, qualification, dob, phoneNumber, address, BigDecimal.valueOf(0), profileImagePath, gender);
                 teacher.getRoles().add(teacherRole);
                 Teacher savedTeacher = teacherDao.save(teacher);
 
@@ -70,7 +71,7 @@ public class AuthService {
                     studentRole.setRoleName("ROLE_STUDENT");
                     studentRole = roleDao.save(studentRole);
                 }
-                Student student = new Student(username, passwordEncoder.encode(password),displayName, gender, dob, address, BigDecimal.valueOf(0));
+                Student student = new Student(username, passwordEncoder.encode(password),displayName, gender, dob, address, grade);
                 student.getRoles().add(studentRole);
                 Student savedStudent = studentDao.save(student);
                 yield "Student %s successfully registered.".formatted(savedStudent.getUsername());
@@ -82,7 +83,7 @@ public class AuthService {
                     parentOrGuardianRole.setRoleName("ROLE_PARENT");
                     parentOrGuardianRole = roleDao.save(parentOrGuardianRole);
                 }
-                ParentOrGuardian parentOrGuardian = new ParentOrGuardian(username, passwordEncoder.encode(password), displayName, gender,nrcNumber, dob, job, phoneNumber, address, ParentType.valueOf(parentType), image_url);
+                ParentOrGuardian parentOrGuardian = new ParentOrGuardian(username, passwordEncoder.encode(password), displayName, gender,nrcNumber, dob, job, phoneNumber, address, ParentType.valueOf(parentType), profileImagePath);
                 parentOrGuardian.getRoles().add(parentOrGuardianRole);
                 ParentOrGuardian savedParentOrGuardian = parentOrGuardianDao.save(parentOrGuardian);
                 yield "Parent/Guardian %s successfully registered.".formatted(savedParentOrGuardian.getUsername());

@@ -17,4 +17,6 @@ public class StudentSummaryDto {
     private LocalDate dob;
     private BigDecimal grade;
     private String profileImagePath;
+    private String address;
 }
+

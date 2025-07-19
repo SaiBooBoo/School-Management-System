@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.athenabackend.dtoSummaries.StudentSummaryDto;
 import org.example.athenabackend.exception.StudentNotFoundException;
-import org.example.athenabackend.model.Subject;
+import org.example.athenabackend.model.Gender;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,14 +33,23 @@ public class Teacher extends User{
     private BigDecimal earning;
     @Column(name = "profile_image_path")
     private String profileImagePath;
-    private Subject subject;
+    private Gender gender = Gender.OTHER;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER )
     private List<StudentTeacher> students = new ArrayList<StudentTeacher>();
 
+    @ManyToMany(mappedBy = "teachers")
+    private Set<Classroom> classrooms = new HashSet<Classroom>();
+
+    @ManyToMany
+    @JoinTable(name= "teacher_subject", joinColumns = @JoinColumn(name = "teacher_id"),
+    inverseJoinColumns = @JoinColumn(name = "subject_id"))
+
+    private Set<Subject> subjects = new HashSet<Subject>();
+
     public Teacher(String username, String password, String displayName,String nrcNumber,
                    String qualification, LocalDate dob, String phone,
-                   String address, BigDecimal earning, String profileImagePath, Subject subject) {
+                   String address, BigDecimal earning, String profileImagePath, Gender gender) {
         super(username, password);
         this.displayName = displayName;
         this.nrcNumber = nrcNumber;
@@ -48,7 +59,7 @@ public class Teacher extends User{
         this.address = address;
         this.earning = earning;
         this.profileImagePath = profileImagePath;
-        this.subject = subject;
+        this.gender = gender;
     }
 
     public void addStudentTeacher(StudentTeacher studentTeacher){

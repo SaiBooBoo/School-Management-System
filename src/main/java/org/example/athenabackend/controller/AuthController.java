@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @RestController
@@ -42,9 +43,11 @@ public class AuthController {
                                   String parentType,
                                   String qualification,
                                   String accountType,
-                                  String image_url,
-                                  Subject subject
+                                  String profileImagePath,
+                                  Subject subject,
+                                  BigDecimal grade
                                   ) {}
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         String returnString = authService.register(
@@ -60,8 +63,9 @@ public class AuthController {
                 registerRequest.parentType,
                 registerRequest.qualification,
                 registerRequest.accountType,
-                registerRequest.image_url,
-                registerRequest.subject);
+                registerRequest.profileImagePath,
+                registerRequest.subject,
+                registerRequest.grade);
         return ResponseEntity.status(HttpStatus.CREATED).body(returnString);
     }
 }

@@ -49,6 +49,9 @@ public class ParentUtil {
                 p.getDisplayName(),
                 p.getJob(),
                 p.getPhoneNumber(),
+                p.getNrcNumber(),
+                p.getAddress(),
+                p.getDob(),
                 p.getParentType(),
                 p.getProfileImagePath()
         );

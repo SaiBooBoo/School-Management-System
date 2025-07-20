@@ -32,7 +32,7 @@ public class AuthService {
     private final UserDao userDao;
     private final AuthenticationManager authenticationManager;
 
-    public String register(String username,
+    public Integer register(String username,
                            String password,
                            String nrcNumber,
                            String phoneNumber,
@@ -47,10 +47,11 @@ public class AuthService {
                            String profileImagePath,
                            Subject subject,
                            BigDecimal grade) {
+
         if(userDao.existsByUsername(username)){
             throw new UsernameAlreadyExistException(username);
         }
-        String msg = switch(accountType){
+       return switch(accountType){
             case "teacher" -> {
                 Role teacherRole = findRoleByName("ROLE_TEACHER");
                 if(!Objects.nonNull(teacherRole)){
@@ -62,7 +63,7 @@ public class AuthService {
                 teacher.getRoles().add(teacherRole);
                 Teacher savedTeacher = teacherDao.save(teacher);
 
-                yield "Teacher %s successfully registered.".formatted(savedTeacher.getUsername());
+                yield savedTeacher.getId();
             }
             case "student" -> {
                 Role studentRole = findRoleByName("ROLE_STUDENT");
@@ -74,7 +75,7 @@ public class AuthService {
                 Student student = new Student(username, passwordEncoder.encode(password),displayName, gender, dob, address, grade);
                 student.getRoles().add(studentRole);
                 Student savedStudent = studentDao.save(student);
-                yield "Student %s successfully registered.".formatted(savedStudent.getUsername());
+                yield savedStudent.getId();
             }
             case "parent" -> {
                 Role parentOrGuardianRole = findRoleByName("ROLE_PARENT");
@@ -86,11 +87,11 @@ public class AuthService {
                 ParentOrGuardian parentOrGuardian = new ParentOrGuardian(username, passwordEncoder.encode(password), displayName, gender,nrcNumber, dob, job, phoneNumber, address, ParentType.valueOf(parentType), profileImagePath);
                 parentOrGuardian.getRoles().add(parentOrGuardianRole);
                 ParentOrGuardian savedParentOrGuardian = parentOrGuardianDao.save(parentOrGuardian);
-                yield "Parent/Guardian %s successfully registered.".formatted(savedParentOrGuardian.getUsername());
+                yield savedParentOrGuardian.getId();
             }
-            default -> "Invalid Account Type";
+            default -> throw new IllegalArgumentException("Unsupported account type: " + accountType);
         };
-        return msg;
+
     }
 
     public Role findRoleByName(String roleName) {

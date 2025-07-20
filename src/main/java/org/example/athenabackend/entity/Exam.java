@@ -26,7 +26,7 @@ public class Exam {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Subject subject;
-    @Column(name = "exam_date", nullable = false)
+    @Column(name = "exam_date")
     private LocalDate examDate;
     @Column(nullable = false)
     private Double score;

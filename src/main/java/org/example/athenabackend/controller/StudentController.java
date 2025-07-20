@@ -151,6 +151,8 @@ public class StudentController {
 
     @PostMapping("/{id}/upload")
     public ResponseEntity<String> uploadProfileImage(@PathVariable Integer id, @RequestParam("file") MultipartFile file){
+
+
         String path = fileStorageService.storeFile(file);
         return ResponseEntity.ok("Image uploaded successfully: " +path);
     }

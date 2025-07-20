@@ -6,10 +6,8 @@ import org.example.athenabackend.model.Subject;
 import org.example.athenabackend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -48,9 +46,11 @@ public class AuthController {
                                   BigDecimal grade
                                   ) {}
 
+    public record RegisterResponse(String msg, Integer id){}
+
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        String returnString = authService.register(
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
+        Integer id = authService.register(
                 registerRequest.username,
                 registerRequest.password,
                 registerRequest.nrcNumber,
@@ -66,6 +66,7 @@ public class AuthController {
                 registerRequest.profileImagePath,
                 registerRequest.subject,
                 registerRequest.grade);
-        return ResponseEntity.status(HttpStatus.CREATED).body(returnString);
+        String msg = "Account created successfully with ID " + id;
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponse(msg, id));
     }
 }

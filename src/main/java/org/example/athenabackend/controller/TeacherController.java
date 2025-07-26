@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.athenabackend.dao.TeacherDao;
 import org.example.athenabackend.dto.TeacherDto;
 import org.example.athenabackend.dtoSummaries.TeacherSummaryDto;
+import org.example.athenabackend.entity.Subject;
 import org.example.athenabackend.entity.Teacher;
 import org.example.athenabackend.exception.TeacherImageNotFoundException;
 import org.example.athenabackend.exception.TeacherNotFoundException;
@@ -36,6 +37,11 @@ public class TeacherController {
                                                            @PathVariable Integer subjectId){
         teacherService.removeSubjectFromTeacher(teacherId, subjectId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Subject with id " + subjectId + " has been removed from teacher with id " + teacherId);
+    }
+
+    @GetMapping("/subjects/{teacherId}")
+    public ResponseEntity<List<Subject>> getSubjectsByTeacherId(@PathVariable Integer teacherId){
+        return ResponseEntity.ok(teacherService.getSubjectsByTeacherId(teacherId));
     }
 
     @GetMapping("/by-subject")

@@ -36,6 +36,11 @@ public class TeacherService {
                 .toList();
     }
 
+    public List<Subject> getSubjectsByTeacherId(Integer teacherId) {
+        List<Subject> teacher = teacherDao.getSubjectsByTeacherId(teacherId);
+        return teacher;
+    }
+
     public List<TeacherSummaryDto> getAllTeacherSummaries(){
         return teacherDao.findAllWithSubjects()
                 .stream()
@@ -143,4 +148,6 @@ public class TeacherService {
         teacher.getSubjects().remove(subject);
         teacherDao.saveAndFlush(teacher);
     }
+
+
 }

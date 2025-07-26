@@ -16,10 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,20 +35,21 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public Integer register(String username,
-                           String password,
-                           String nrcNumber,
-                           String phoneNumber,
-                           LocalDate dob,
-                           String displayName,
-                           Gender gender,
-                           String address,
-                           String job,
-                           String parentType,
-                           String qualification,
-                           String accountType,
-                           String profileImagePath,
-                           Subject subject,
-                           BigDecimal grade) {
+                            String password,
+                            String nrcNumber,
+                            String phoneNumber,
+                            LocalDate dob,
+                            String displayName,
+                            Gender gender,
+                            String address,
+                            String job,
+                            String parentType,
+                            String qualification,
+                            String accountType,
+                            String profileImagePath,
+                            Subject subject,
+                            BigDecimal grade,
+                            Role roles) {
 
         if(userDao.existsByUsername(username)){
             throw new UsernameAlreadyExistException(username);
@@ -100,12 +103,21 @@ public class AuthService {
 
     public String login(String username, String password) {
         var auth = new UsernamePasswordAuthenticationToken(username, password);
+
         Authentication authentication = authenticationManager.authenticate(auth);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         StringBuilder sb = new StringBuilder();
         for(var role:authentication.getAuthorities()) {
             sb.append(role);
         }
         return sb.toString();
+    }
+
+    public String findAccountTypeByUsername(String username) {
+        String accountType = userDao.findRolesByUsername(username).stream()
+                .map(r -> r.getRoleName())
+                .collect(Collectors.joining(","));
+        return accountType;
     }
 }

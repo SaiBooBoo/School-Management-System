@@ -21,7 +21,7 @@ public class TeacherDto {
     private String nrcNumber;
     private String qualification;
     private LocalDate dob;
-    private String phone;
+    private String phoneNumber;
     private String address;
     private BigDecimal earning;
     private Gender gender;

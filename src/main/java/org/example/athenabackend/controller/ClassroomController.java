@@ -2,6 +2,8 @@ package org.example.athenabackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.athenabackend.dtoSummaries.StudentSummaryRecord;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryDto;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryRecord;
 import org.example.athenabackend.entity.Classroom;
 import org.example.athenabackend.entity.Student;
 import org.example.athenabackend.service.ClassroomService;
@@ -50,5 +52,11 @@ public class ClassroomController {
     public ResponseEntity<List<StudentSummaryRecord>> getStudentsInClassroom(@PathVariable Integer classroomId){
         List<StudentSummaryRecord> students = classroomService.getStudentsInClassroom(classroomId);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/{classroomId}/teachers")
+    public ResponseEntity<List<TeacherSummaryRecord>> getTeachersInClassroom(@PathVariable Integer classroomId){
+        List<TeacherSummaryRecord> teachers = classroomService.getTeachersInClassroom(classroomId);
+        return ResponseEntity.ok(teachers);
     }
 }

@@ -26,5 +26,4 @@ public class StudentDto {
     private String profileImagePath;
     private BigDecimal grade;
     private List<ParentSummaryDto> parents;
-
 }

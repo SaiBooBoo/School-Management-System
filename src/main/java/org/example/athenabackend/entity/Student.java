@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.example.athenabackend.exception.ParentOrGuardianNotFoundException;
 import org.example.athenabackend.model.AttendanceStatus;
 import org.example.athenabackend.model.Gender;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -57,7 +58,7 @@ public class Student extends User{
     @ManyToMany(mappedBy = "students")
     private Set<Classroom> classrooms = new HashSet<>();
 
-    public Student(String username, String password,String displayName, Gender gender, LocalDate dob, String address, BigDecimal grade) {
+    public Student(String username, String password, String displayName, Gender gender, LocalDate dob, String address, BigDecimal grade) {
         super(username, password);
         this.dob = dob;
         this.address = address;

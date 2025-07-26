@@ -5,6 +5,8 @@ import org.example.athenabackend.dao.ClassroomDao;
 import org.example.athenabackend.dao.StudentDao;
 import org.example.athenabackend.dao.TeacherDao;
 import org.example.athenabackend.dtoSummaries.StudentSummaryRecord;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryDto;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryRecord;
 import org.example.athenabackend.entity.Classroom;
 import org.example.athenabackend.entity.Student;
 import org.example.athenabackend.entity.Teacher;
@@ -66,5 +68,10 @@ public class ClassroomService {
     public List<StudentSummaryRecord> getStudentsInClassroom(Integer classroomId){
         return classroomDao.findStudentSummariesByClassroomId(classroomId);
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<TeacherSummaryRecord> getTeachersInClassroom(Integer classroomId) {
+        return classroomDao.findTeacherSummariesByClassroomId(classroomId);
     }
 }

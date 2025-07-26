@@ -44,7 +44,6 @@ public class Teacher extends User{
     @ManyToMany
     @JoinTable(name= "teacher_subject", joinColumns = @JoinColumn(name = "teacher_id"),
     inverseJoinColumns = @JoinColumn(name = "subject_id"))
-
     private Set<Subject> subjects = new HashSet<Subject>();
 
     public Teacher(String username, String password, String displayName,String nrcNumber,

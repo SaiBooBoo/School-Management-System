@@ -248,6 +248,7 @@ public class StudentService {
         attendanceDao.deleteById(attendanceId);
     }
 
+    @Transactional
     public void deleteStudentById(Integer id) {
         studentDao.deleteById(id);
     }

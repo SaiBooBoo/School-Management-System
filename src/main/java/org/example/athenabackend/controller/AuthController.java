@@ -1,6 +1,8 @@
 package org.example.athenabackend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.athenabackend.dao.UserDao;
+import org.example.athenabackend.entity.Role;
 import org.example.athenabackend.model.Gender;
 import org.example.athenabackend.model.Subject;
 import org.example.athenabackend.service.AuthService;
@@ -17,11 +19,13 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final UserDao userDao;
     public record LoginRequest(String username, String password) {}
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         String returnString = authService.login(loginRequest.username, loginRequest.password);
+
         return ResponseEntity.ok(returnString);
     }
 
@@ -43,7 +47,8 @@ public class AuthController {
                                   String accountType,
                                   String profileImagePath,
                                   Subject subject,
-                                  BigDecimal grade
+                                  BigDecimal grade,
+                                  Role roles
                                   ) {}
 
     public record RegisterResponse(String msg, Integer id){}
@@ -65,8 +70,21 @@ public class AuthController {
                 registerRequest.accountType,
                 registerRequest.profileImagePath,
                 registerRequest.subject,
-                registerRequest.grade);
+                registerRequest.grade,
+                registerRequest.roles);
         String msg = "Account created successfully with ID " + id;
         return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponse(msg, id));
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<Role> findRoleByName(@PathVariable String roleName){
+        Role role = authService.findRoleByName(roleName);
+        return ResponseEntity.status(HttpStatus.OK).body(role);
+    }
+
+    @GetMapping("/accountType/{username}")
+    public ResponseEntity<String> getAccountTypeByUsername(@PathVariable String username){
+        String accountType = authService.findAccountTypeByUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(accountType);
     }
 }

@@ -2,6 +2,7 @@ package org.example.athenabackend.dao;
 
 
 import org.example.athenabackend.dtoSummaries.StudentSummaryRecord;
+import org.example.athenabackend.dtoSummaries.TeacherSummaryRecord;
 import org.example.athenabackend.entity.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,11 @@ public interface ClassroomDao extends JpaRepository<Classroom, Integer> {
 
     Optional<Classroom> findByName(String name);
 
+    @Query("""
+    select new org.example.athenabackend.dtoSummaries.TeacherSummaryRecord(
+        t.id, t.displayName )
+        from Classroom c join c.teachers t
+        where c.id = :classroomId
+""")
+    List<TeacherSummaryRecord> findTeacherSummariesByClassroomId(@Param("classroomId")Integer classroomId);
 }
